@@ -25,3 +25,11 @@ maven local repository. You can do this by running the command: `mvn install`
 - Now you have to create all the images defined in the dockerfiles. You can do this by running the command: `sudo docker-compose build`
 - Now let's scale our container based on the web application image. Let's create 5 replics. To do that run the command: `sudo docker-compose scale web=5`
 - Finally, run the command `sudo docker-compose up -d` to start our containers;
+
+## Accessing the java webapp
+
+After complete the steps above, you can access the java webapp by
+the address: `http://localhost:83/exemplo-primeira-aula/cliente`
+
+PS: If the port 83 is being used by some service in your machine, just replace the port
+in the file docker-compose.yaml
