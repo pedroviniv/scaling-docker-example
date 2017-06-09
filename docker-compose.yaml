@@ -1,12 +1,16 @@
 version: '2'
+#The default network definition; All the services below will be connected to this network;
 networks:
   default:
     external:
       name: cliente_default
+#The volume definition to postgres service; It's local so the path "/var/lib/postgresql/data"
+#will be persisted on the host;
 volumes:
   postgres-volume-cliente:
     driver: local
 services:
+  #Just a PostgreSQL service. We'll use this container to persist all data produced by the web service.
   postgres:
     build: ./dac-exemplo-web/postgres/
     image: dac/docker-exemplo/db
@@ -15,6 +19,8 @@ services:
       - "5433:5432"
     volumes:
       - postgres-volume-cliente:/var/lib/postgresql/data
+  #The java webapp service that is going to be available to the client,
+  #This is the one we're going to scale.
   web:
     build: ./dac-exemplo-web/
     image: dac/docker-exemplo/web
@@ -22,10 +28,10 @@ services:
       - "8080"
     depends_on:
       - "postgres"
-    #A associação de links deve ser entre serviços e não entre containers, 
-    #então referenciamos agora o serviço como um todo e não especificamente o container;
     links: 
       - "postgres:dac-docker-exemplo-db"
+  #A JSE app that will be comunicating with postgres service to
+  #list the persisted data;
   jse:
     build: ./dac-exemplo-jse/
     image: dac/docker-exemplo/jse
@@ -34,6 +40,8 @@ services:
       - "postgres:dac-docker-exemplo-db"
     depends_on:
       - "postgres"
+  #The proxy that will handle all incoming requests and redirect to 
+  #one of the web service replic;
   proxy:
     build: ./dac-exemplo-web/nginx/
     ports: 
