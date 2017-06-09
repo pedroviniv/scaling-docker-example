@@ -1,0 +1,44 @@
+version: '2'
+networks:
+  default:
+    external:
+      name: cliente_default
+volumes:
+  postgres-volume-cliente:
+    driver: local
+services:
+  postgres:
+    build: ./dac-exemplo-web/postgres/
+    image: dac/docker-exemplo/db
+    container_name: dac-docker-exemplo-db
+    ports: 
+      - "5433:5432"
+    volumes:
+      - postgres-volume-cliente:/var/lib/postgresql/data
+  web:
+    build: ./dac-exemplo-web/
+    image: dac/docker-exemplo/web
+    expose:
+      - "8080"
+    depends_on:
+      - "postgres"
+    #A associação de links deve ser entre serviços e não entre containers, 
+    #então referenciamos agora o serviço como um todo e não especificamente o container;
+    links: 
+      - "postgres:dac-docker-exemplo-db"
+  jse:
+    build: ./dac-exemplo-jse/
+    image: dac/docker-exemplo/jse
+    container_name: dac-docker-exemplo-jse
+    links: 
+      - "postgres:dac-docker-exemplo-db"
+    depends_on:
+      - "postgres"
+  proxy:
+    build: ./dac-exemplo-web/nginx/
+    ports: 
+      - "83:80"
+    links:
+      - web
+
+ 
