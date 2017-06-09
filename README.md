@@ -5,8 +5,8 @@ using Docker, Tomcat as the java application server and Nginx to handle the inco
 
 The project is divided in three modules;
 - **dac-exemplo-shared** that will contain all the shared classes between the modules below;
-- **dac-exemplo-jse** that is an jse application that communicates to the database to list the persisted clients;
-- **dac-exemplo-web** that is an web application that communicates to the database to list the persisted clients; 
+- **dac-exemplo-jse** that is a jse application that communicates to the database to list the persisted clients;
+- **dac-exemplo-web** that is a web application that communicates to the database to list the persisted clients; 
 
 ## Requirements
 
